@@ -21,7 +21,9 @@ Use the domain picker at the top of the sidebar to switch spaces or create a new
 
 Open **数据与设置**, paste your DeepSeek API Key, and choose **保存并启用**. PhishMap writes the key to the ignored `.env.local` file on this computer and keeps it out of browser storage and the client bundle. The development server is bound to `127.0.0.1`.
 
-Use **AI 补全** in the import queue or **AI 补全并翻译** in a paper editor. The assistant proposes missing bibliographic fields, Chinese title/abstract translations, research-card notes, and labels drawn from the active domain's taxonomy. For a PDF, the browser extracts text locally from up to eight pages and sends up to 24,000 characters only when you click an AI action; the PDF bytes are not uploaded. Existing non-empty fields are preserved, suggested tags remain unconfirmed, and the model does not independently search publication databases. Review its source excerpts and verify the candidates before marking a record as confirmed.
+Use **AI 补全** in the import queue or **AI 补全并翻译** in a paper editor to propose bibliographic fields, title/abstract translations, research-card notes, and labels from the active domain's taxonomy. For a PDF, text is extracted locally from up to eight pages; up to 24,000 characters are sent only when you click an AI action. Existing non-empty fields are preserved and suggested tags remain unconfirmed. This is a source-grounded candidate extractor, not independent publication database verification: without a DOI lookup or external bibliographic source, it cannot prove that author, venue, year, or DOI are correct. Review the cited source excerpts and confirm records manually.
+
+In **阅读工作区**, PDF.js renders the PDF locally with selectable text and page numbers. Select a passage to translate or ask about it, or paste/add a screenshot to ask a visual question. The reading assistant includes the current paper's basic metadata, your question, selected passage, the current screenshot, and up to six prior text Q&A turns in the request to DeepSeek. It sends only after you click **提问**; PDF bytes are not uploaded. Answers, Q&A history, and screenshots are stored with that paper in the browser's IndexedDB, and an answer can be saved into reading notes with its quote, screenshot, and page number.
 
 AI use requires a DeepSeek API key and may incur charges under the account's current API pricing. Remove the key from **数据与设置** to disable AI requests.
 
@@ -47,7 +49,7 @@ npm run preview
 - The database is per browser profile and origin. Use **Data & Settings → Export full backup** for migration and recovery.
 - A backup with many large PDFs can become a large JSON download because attachments are embedded as Base64.
 - PDF text extraction is heuristic and never marks extracted metadata as verified. It does not perform OCR.
-- AI suggestions are unverified candidates. When explicitly requested, paper metadata and extracted PDF text may be sent to DeepSeek; the local PDF file remains in the browser database.
+- AI suggestions are unverified candidates. When explicitly requested, paper metadata and extracted PDF text may be sent to DeepSeek. Reading Q&A can also send selected text, screenshots, and recent chat context; the local PDF file remains in the browser database.
 - Classification similarity uses confirmed taxonomy fields. Missing fields do not count as zero; valid dimensions are reweighted. Text similarity is local TF-IDF over paper titles and abstracts.
 - Computed similarity is not a citation or a claim of influence. Only manually confirmed relation records appear as explicit relations.
 - No sample papers are preloaded. The empty state avoids putting invented paper details into a research library.
@@ -58,4 +60,6 @@ npm run preview
 - `src/model.js` — taxonomy, BibTeX parsing, and similarity calculations
 - `src/db.js` — IndexedDB persistence
 - `src/pdf.js` — local PDF text extraction
+- `src/PdfReader.jsx` — local PDF page rendering and selectable text layer
+- `src/ReadingAssistant.jsx` — selected-text and screenshot-based reading Q&A
 - `src/styles.css` — responsive UI and map presentation

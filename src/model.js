@@ -59,12 +59,12 @@ export const emptyPaper = (domainId = DEFAULT_DOMAIN_ID) => ({
   tags: { modalities: [], tasks: [], architectures: [], fusionStages: [], mechanisms: [], objectives: [], challenges: [], datasets: [], evaluationSettings: [] },
   tagStatus: { modalities: 'Unknown', tasks: 'Unknown', method: 'Unknown', experiments: 'Unknown' },
   analysis: { problem: '', motivation: '', featureExtractors: '', contributions: '', findings: '', limitations: '', personalInsights: '', openQuestions: '' },
-  experiments: [], notes: [], evidence: [], relations: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+  experiments: [], notes: [], evidence: [], relations: [], readingChat: [], createdAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
 });
 
 export function normalizePaper(paper) {
   const base = emptyPaper();
-  return { ...base, ...paper, modalityRoles: { ...base.modalityRoles, ...(paper.modalityRoles || {}) }, tags: { ...base.tags, ...(paper.tags || {}) }, tagStatus: { ...base.tagStatus, ...(paper.tagStatus || {}) }, analysis: { ...base.analysis, ...(paper.analysis || {}) }, experiments: paper.experiments || [], notes: paper.notes || [], evidence: paper.evidence || [], relations: paper.relations || [] };
+  return { ...base, ...paper, modalityRoles: { ...base.modalityRoles, ...(paper.modalityRoles || {}) }, tags: { ...base.tags, ...(paper.tags || {}) }, tagStatus: { ...base.tagStatus, ...(paper.tagStatus || {}) }, analysis: { ...base.analysis, ...(paper.analysis || {}) }, experiments: paper.experiments || [], notes: paper.notes || [], evidence: paper.evidence || [], relations: paper.relations || [], readingChat: paper.readingChat || [] };
 }
 
 const clean = (s = '') => String(s).toLowerCase().replace(/[{}\\]/g, ' ').replace(/\s+/g, ' ').trim();

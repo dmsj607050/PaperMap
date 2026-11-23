@@ -42,3 +42,7 @@ export function reviewPaperWithAi(paper, sourceText = '', taxonomy, domainName =
     }),
   });
 }
+
+export function askReadingAssistant(payload) {
+  return request('/api/ai/reading', { method: 'POST', body: JSON.stringify(payload) });
+}
